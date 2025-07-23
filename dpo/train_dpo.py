@@ -271,7 +271,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_len", type=int, default=512)
 
     # whether use ref model
-    parser.add_argument("--use_ref", action="store_true", default=True)
+    parser.add_argument("--use_ref", action="store_true", default=False)
 
     # DPO loss
     parser.add_argument("--recipe", type=str, default="mean", help="mean or sum")

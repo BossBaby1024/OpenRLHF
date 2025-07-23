@@ -15,12 +15,13 @@ read -r -d '' training_commands <<EOF
    --micro_train_batch_size 1 \
    --pretrain /home/work2/work/zhangxq/endorm/hub/Qwen2.5-7B \
    --bf16 \
-   --max_epochs 1 \
+   --max_epochs 3 \
    --max_len 4096 \
    --zero_stage 2 \
    --learning_rate 5e-7 \
    --beta 0.1 \
-   --recipe mean \
+   --use_ref \
+   --recipe sum \
    --dataset ${train_files} \
    --eval_dataset ${val_files} \
    --eval_split train \
