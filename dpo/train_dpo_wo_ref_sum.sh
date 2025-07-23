@@ -1,6 +1,6 @@
 set -x
 
-save_path=./checkpoints/Qwen2.5-7B-dpo_wo_ref_mean
+save_path=./checkpoints/Qwen2.5-7B-dpo_wo_ref_sum
 
 train_files=data/UltraFeedback/sft.parquet
 val_files=data/UltraFeedback/test.parquet
@@ -20,7 +20,7 @@ read -r -d '' training_commands <<EOF
    --zero_stage 2 \
    --learning_rate 5e-7 \
    --beta 0.1 \
-   --recipe mean \
+   --recipe sum \
    --use_identity \
    --dataset ${train_files} \
    --eval_dataset ${val_files} \

@@ -16,11 +16,12 @@ class DPOLoss(nn.Module):
     DPO Loss
     """
 
-    def __init__(self, beta: float, label_smoothing: float = 0.0, ipo: bool = False) -> None:
+    def __init__(self, beta: float, label_smoothing: float = 0.0, ipo: bool = False, use_identity: bool = False) -> None:
         super().__init__()
         self.beta = beta
         self.label_smoothing = label_smoothing
         self.ipo = ipo
+        self.use_identity = use_identity
 
     def forward(
         self,
@@ -35,6 +36,8 @@ class DPOLoss(nn.Module):
 
         if self.ipo:
             losses = (logits - 1 / (2 * self.beta)) ** 2  # Eq. 17 of https://arxiv.org/pdf/2310.12036v2.pdf
+        elif self.use_identity:
+            losses = -logits
         else:
             # Eq. 3 https://ericmitchell.ai/cdpo.pdf; label_smoothing=0 gives original DPO (Eq. 7 of https://arxiv.org/pdf/2305.18290.pdf)
             losses = (
@@ -80,6 +83,7 @@ class DPOTrainer(ABC):
         eval_dataloader,
         scheduler,
         recipe,
+        use_identity: bool = False,
         max_norm=0.5,
         beta=0.01,
         max_epochs: int = 2,
@@ -89,6 +93,7 @@ class DPOTrainer(ABC):
         super().__init__()
         self.strategy = strategy
         self.recipe = recipe # mean or sum
+        self.use_identity = use_identity
         self.epochs = max_epochs
         self.max_norm = max_norm
         self.model = model
@@ -103,7 +108,7 @@ class DPOTrainer(ABC):
         self.disable_ds_ckpt = disable_ds_ckpt
 
         self.beta = beta
-        self.loss_fn = DPOLoss(self.beta, self.args.label_smoothing, self.args.ipo)
+        self.loss_fn = DPOLoss(self.beta, self.args.label_smoothing, self.args.ipo, self.use_identity)
 
         # Mixtral 8*7b
         self.aux_loss = self.args.aux_loss_coef > 1e-8

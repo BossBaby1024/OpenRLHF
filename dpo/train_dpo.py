@@ -272,9 +272,9 @@ if __name__ == "__main__":
 
     # whether use ref model
     parser.add_argument("--use_ref", action="store_true", default=False)
-
     # DPO loss
     parser.add_argument("--recipe", type=str, default="mean", help="mean or sum")
+    parser.add_argument("--use_identity", action="store_true", default=False)
 
     # wandb parameters
     parser.add_argument("--use_wandb", type=str, default=None)
