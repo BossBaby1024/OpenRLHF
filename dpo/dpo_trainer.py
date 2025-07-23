@@ -107,6 +107,9 @@ class DPOTrainer(ABC):
         self.save_hf_ckpt = save_hf_ckpt
         self.disable_ds_ckpt = disable_ds_ckpt
 
+        print(f"use_identity: {self.use_identity}")
+        print(f"recipe: {self.recipe}")
+        
         self.beta = beta
         self.loss_fn = DPOLoss(self.beta, self.args.label_smoothing, self.args.ipo, self.use_identity)
 

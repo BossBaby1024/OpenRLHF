@@ -17,6 +17,12 @@ def preprocess_data(
 ) -> str:
     if apply_chat_template:
         if prompt_key:
+            if isinstance(data[prompt_key], str):
+                data[prompt_key] = [{"role": "user", "content": data[prompt_key]}]
+            if isinstance(data[chosen_key], str):
+                data[chosen_key] = [{"role": "assistant", "content": data[chosen_key]}]
+            if isinstance(data[rejected_key], str):
+                data[rejected_key] = [{"role": "assistant", "content": data[rejected_key]}]
             prompt = apply_chat_template(data[prompt_key], tokenize=False, add_generation_prompt=True)
             chosen = apply_chat_template(data[prompt_key] + data[chosen_key], tokenize=False)[len(prompt) :]
             rejected = apply_chat_template(data[prompt_key] + data[rejected_key], tokenize=False)[len(prompt) :]

@@ -159,6 +159,7 @@ def train(args):
         save_hf_ckpt=args.save_hf_ckpt,
         disable_ds_ckpt=args.disable_ds_ckpt,
         recipe=args.recipe,
+        use_identity=args.use_identity,
     )
 
     trainer.fit(args, consumed_samples, num_update_steps_per_epoch)
